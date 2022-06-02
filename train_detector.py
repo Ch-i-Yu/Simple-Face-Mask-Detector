@@ -22,15 +22,15 @@ This python program aims to:
 
 
 
-# import required dependencies and libraries
-from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import MobileNetV2
-from keras.layers import AveragePooling2D, Dropout, Flatten, Dense, Input
-from keras.models import Model
-from keras.optimizers import Adam
-from keras.applications.mobilenet_v2 import preprocess_input
-from keras.preprocessing.image import img_to_array, load_img
-from keras.utils import to_categorical
+# import required dependencies and libraries on google-colab venv
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.layers import AveragePooling2D, Dropout, Flatten, Dense, Input
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
+from tensorflow.keras.utils import to_categorical
 
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split

@@ -22,10 +22,10 @@ This python program aims to:
 
 
 
-# import required dependencies and libraries
-from keras.applications.mobilenet_v2 import preprocess_input
-from keras.preprocessing.image import img_to_array
-from keras.models import load_model
+# import required dependencies and libraries on google-colab venv
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
 
 import numpy as np
 import argparse
