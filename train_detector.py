@@ -9,7 +9,7 @@
 Face-Mask Detector with OpenCV and Keras(TensorFlow)
 
 This goal of this project is to roughly identify
-wheather a person is wearing a mask or not.
+whether a person is wearing a mask or not.
 
 This project aims to:
 - Train a model on images of people wearing masks on Google Colab & Google Drive
@@ -81,7 +81,7 @@ data = []
 labels = []
 
 if not imagePaths:
-    sys.exit("<Error occured in image path!>")
+    sys.exit("<Error occurred in image path!>")
 
 for imagePath in imagePaths:
     # split imagePath with '\' & extract folder name 
@@ -92,13 +92,13 @@ for imagePath in imagePaths:
     image = img_to_array(image)
     image = preprocess_input(image)
 
-    # append data and lables respectively
+    # append data and labels respectively
     data.append(image)
     labels.append(label)
 
 # convert data & labels to Numpy arrays
 data = np.array(data, dtype = "float32")
-labels = np.arrray(labels)
+labels = np.array(labels)
 
 
 
@@ -133,7 +133,7 @@ aug = ImageDataGenerator(
 
 
 
-# load MobileNetV2 network with outputlayed banned
+# load MobileNetV2 network with outputlayers banned
 baseModel = MobileNetV2(
     weights = "imagenet",       # load pre-trained weights
     include_top = False,        # not retain top 3 fully-connected networks
