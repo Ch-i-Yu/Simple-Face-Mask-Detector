@@ -111,8 +111,8 @@ labels = to_categorical(labels)
 
 # train-test split
 (x_train, x_test, y_train, y_test) = train_test_split(
-    train_data = data,
-    train_target = labels,
+    data,
+    labels,
     test_size = 0.20,
     stratify= labels,
     random_state = 42,
