@@ -23,9 +23,9 @@ This python program aims to:
 
 
 # import required dependencies and libraries on google-colab venv
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.models import load_model
+from keras.applications.mobilenet_v2 import preprocess_input
+from keras.utils import img_to_array
+from keras.models import load_model
 
 import numpy as np
 import argparse
@@ -37,55 +37,66 @@ from natsort import natsorted, ns
 # construct parsed arguments
 ap = argparse.ArgumentParser()
 ap.add_argument(
-    "-s", "--src",
+    "-i", "--image",
     required = True,
     type = str,
     help = "path to input image"
 )
 ap.add_argument(
-    "-d", "--dst",
+    "-d", "--destination",
     type = str,
-    default = "Face-Mask-Detector/Processed",
+    default = "./Processed",
     help = "path(directory) to output image"
 )
 ap.add_argument(
-    "-px", "--prototxt",
+    "-m", "--model",
     type = str,
-    default = "Face-Mask-Detector/Model/deploy.prototxt",
-    help = "path to prototxt of face detector"
+    default = "./Model/mask_detector.model",
+    help = "path to trained mask detector"
 )
 ap.add_argument(
-    "-ws", "--weights",
+    "-f", "--face",
     type = str,
-    default = "Face-Mask-Detector/Model/res10_300x300_ssd_iter_140000.caffemodel",
-    help = "path to caffemodel of face detector"
+    default = "./Model/Face-Detector",
+    help = "path(directory) to face detector"
 )
 ap.add_argument(
-    "-pl", "--plot",
+    "-p", "--plot",
     type = str,
     default = "Face-Mask-Detector/Plots/predict.png",
     help = "path to output prediction"
+)
+ap.add_argument(
+    "-c", "--confidence",
+    type = float,
+    default = 0.50,
+    help = "minimum probability to filter weak face detections"
 )
 args = vars(ap.parse_args())
 
 
 
-# load serialized face detector network
-print("Loading Serialized Face Detector Network......")
-prototxtPath = args["prototxt"]
-weightsPath = args["weights"]
+# block base_loging of INFO/WARNING/ERROR
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
+
+
+
+# load pre-trained face detector network
+print("<Loading Pre-Trained Face Detector Network......>")
+prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
+weightsPath = os.path.sep.join([args["face"], "res10_300x300_ssd_iter_140000.caffemodel"])
 net = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 
 
 # load face-mask detector model
-print("Loading Face-Mask Detector Model......")
-model = load_model("mask_detector.model")
+print("<Loading Face-Mask Detector Model......>")
+model = load_model(args["model"])
 
 
 
 # load input image with heights & weights
-image = cv2.imread(args["src"])
+image = cv2.imread(args["image"])
 (h, w) = image.shape[:2]        # h => heights; w => weights
 
 # construct a blob of image
@@ -111,7 +122,7 @@ for i in range(0, face_detections.shape[2]):
         print("<Process Face-Mask Detections......>")
 
         # compute the (x, y) coordinates of the bounding box of detected face
-        face_box = face_detections[0, 0, i, 7] * np.array([w, h, w, h])
+        face_box = face_detections[0, 0, i, 3:7] * np.array([w, h, w, h])
         (x_start, y_start, x_end, y_end) = face_box.astype("int")
 
         # adjust the bounding box to fall within dimensions of the frame(image)
@@ -122,7 +133,7 @@ for i in range(0, face_detections.shape[2]):
         face = image[y_start:y_end, x_start:x_end]
         
         # convert channel BGR -> RGB
-        face = cv2.cvtColor(face, cv2.COLORBGR2RGB)
+        face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
 
         # resize to fit model
         face = cv2.resize(face, (224, 224))
@@ -132,19 +143,22 @@ for i in range(0, face_detections.shape[2]):
         face = np.expand_dims(face, axis=0)
 
         # predict on face with loaded Face-Mask Detector model
-        (withMask, withoutMask) = model.predict(face)[0]
+        (with_mask, without_mask) = model.predict(face)[0]
 
         # determine the label
-        if withMask > withoutMask:
-            label = "withMask"
+        if with_mask > without_mask:
+            label = "with Mask"     # with_mask
         else:
-            label = "withoutMask"
+            label = "without Mask"  # without_mask
 
         # determine the color of bounding box & bounding description
-        if label == "withMask":
+        if label == "with Mask":
             color = (0, 250, 0)     # green
         else:
             color = (0, 0, 250)     # red
+
+        # add probability to the label
+        label = "{}: {:.2f}%".format(label, max(with_mask, without_mask) * 100)
 
         # put label & bounding box on output image
         cv2.putText(
@@ -164,13 +178,13 @@ for i in range(0, face_detections.shape[2]):
             thickness = 2
         )   # bounding box
 
-        # save output image
-        fileName = args["dst"] + "processed_" + args["src"].split("/")[-1]
-        retval = cv2.imwrite(fileName)
+# save output image
+fileName = os.path.sep.join([args["destination"], "processed_" + args["image"].split("\\")[-1]])
+retval = cv2.imwrite(fileName, image)
 
-        if retval:
-            print("<processed_" + args["src"].split("/")[-1] + " saved successfuly.>")
-        else:
-            print("<processed_" + args["src"].split("/")[-1] + " saved unsuccessfuly.>")
+if retval:
+    print("<processed_" + args["image"].split("\\")[-1] + " saved successfuly.>")
+else:
+    print("<processed_" + args["image"].split("\\")[-1] + " saved unsuccessfuly.>")
 
 print("<End of Face-Mask Detection.>")
