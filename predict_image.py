@@ -22,7 +22,7 @@ This python program aims to:
 
 
 
-# import required dependencies and libraries on google-colab venv
+# import required dependencies and libraries
 from keras.applications.mobilenet_v2 import preprocess_input
 from keras.utils import img_to_array
 from keras.models import load_model
@@ -49,22 +49,16 @@ ap.add_argument(
     help = "path(directory) to output image"
 )
 ap.add_argument(
-    "-m", "--model",
-    type = str,
-    default = "./Model/mask_detector.model",
-    help = "path to trained mask detector"
-)
-ap.add_argument(
     "-f", "--face",
     type = str,
-    default = "./Model/Face-Detector",
+    default = "./Model/FaceNet",
     help = "path(directory) to face detector"
 )
 ap.add_argument(
-    "-p", "--plot",
+    "-m", "--mask",
     type = str,
-    default = "Face-Mask-Detector/Plots/predict.png",
-    help = "path to output prediction"
+    default = "./Model/MaskNet/mask_net.model",
+    help = "path to trained mask detector"
 )
 ap.add_argument(
     "-c", "--confidence",
@@ -85,13 +79,13 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 print("<Loading Pre-Trained Face Detector Network......>")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
 weightsPath = os.path.sep.join([args["face"], "res10_300x300_ssd_iter_140000.caffemodel"])
-net = cv2.dnn.readNet(prototxtPath, weightsPath)
+faceNet = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 
 
 # load face-mask detector model
 print("<Loading Face-Mask Detector Model......>")
-model = load_model(args["model"])
+maskNet = load_model(args["mask"])
 
 
 
@@ -110,15 +104,15 @@ blob = cv2.dnn.blobFromImage(
 
 # obtain face detections through blob & face detector network
 print("<Process Face Detections......>")
-net.setInput(blob)
-face_detections = net.forward()
+faceNet.setInput(blob)
+face_detections = faceNet.forward()
 
 # loop over face detections
 for i in range(0, face_detections.shape[2]):
     # extract confidence of face detection
     face_confidence = face_detections[0, 0, i, 2]
     
-    if face_confidence > 0.5:
+    if face_confidence > args["confidence"]:
         print("<Process Face-Mask Detections......>")
 
         # compute the (x, y) coordinates of the bounding box of detected face
@@ -139,11 +133,12 @@ for i in range(0, face_detections.shape[2]):
         face = cv2.resize(face, (224, 224))
 
         # preprocess
+        face = img_to_array(face)
         face = preprocess_input(face)
         face = np.expand_dims(face, axis=0)
 
         # predict on face with loaded Face-Mask Detector model
-        (with_mask, without_mask) = model.predict(face)[0]
+        (with_mask, without_mask) = maskNet.predict(face)[0]
 
         # determine the label
         if with_mask > without_mask:
@@ -177,6 +172,8 @@ for i in range(0, face_detections.shape[2]):
             color = color, 
             thickness = 2
         )   # bounding box
+
+
 
 # save output image
 fileName = os.path.sep.join([args["destination"], "processed_" + args["image"].split("\\")[-1]])

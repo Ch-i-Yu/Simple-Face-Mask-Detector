@@ -22,7 +22,7 @@ This python program aims to:
 
 
 
-# import required dependencies and libraries on google-colab venv
+# import required dependencies and libraries
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import MobileNetV2
 from keras.layers import AveragePooling2D, Dropout, Flatten, Dense, Input
@@ -64,10 +64,10 @@ ap.add_argument(
     default = "./Plots/plot.png",
 	help = "path to output loss & accuracy plot")
 ap.add_argument(
-    "-m", "--model",
+    "-m", "--mask",
     type = str,
-	default = "./Model/mask_detector.model",
-	help = "path to output detector model")
+	default = "./Model/MaskNet/mask_net.model",
+	help = "path to output face-mask detector model")
 args = vars(ap.parse_args())
 
 
@@ -198,7 +198,7 @@ print(classification_report(
 
 # save model
 print("<Saving Face-Mask Detector Model......>")
-model.save(args["model"], save_format="h5")
+model.save(args["mask"], save_format="h5")
 
 
 
