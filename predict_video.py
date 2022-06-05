@@ -55,6 +55,12 @@ ap.add_argument(
     default = 0.50,
     help = "minimum probability to filter weak face detections"
 )
+ap.add_argument(
+    "-v", "--video",
+    type = bool,
+    default = False,
+    help = "save captured video"
+)
 args = vars(ap.parse_args())
 
 
@@ -62,6 +68,7 @@ args = vars(ap.parse_args())
 # block base_loging of INFO/WARNING/ERROR
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 
+img_array = []
 
 
 def detect_and_predict_face_mask(frame, faceNet, maskNet):
@@ -141,7 +148,7 @@ def detect_and_predict_face_mask(frame, faceNet, maskNet):
         # make predictions if at least one face was detected
     if len(faces) > 0:
         faces = np.array(faces, dtype = "float32")
-        preds = maskNet.predict(faces)
+        preds = maskNet.predict(faces, batch_size=32)
 
     return (locs, preds)
 
@@ -223,6 +230,10 @@ while True:
     # show the output frame
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(10)
+
+    img_array.append(frame)
+    height, width, layers = frame.shape
+    size = (width, height)
     
     # if the ESC key is pressed, break from loop
     if key == 27:       # ESC
@@ -234,4 +245,18 @@ while True:
         break
 video.stop()
 cv2.destroyAllWindows()
+
+
+
+# Save all output frames as MP4 video
+if args["video"]:
+    print("<Saving video......>")
+    output_path = os.path.sep.join(["./Processed", time.asctime() + ".mp4"])
+    output = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'DIVX'), 30, size)
+
+    for i in range(len(img_array)):
+        output.write(img_array[i])
+    output.release()
+    print("<Successfully saved video.>")
+
 print("<End of Face-Mask Detection.>")
