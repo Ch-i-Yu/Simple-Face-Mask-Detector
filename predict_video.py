@@ -139,9 +139,9 @@ def detect_and_predict_face_mask(frame, faceNet, maskNet):
             locs.append((x_start, y_start, x_end, y_end))
 
         # make predictions if at least one face was detected
-        if len(faces) > 0:
-            faces = np.array(faces, dtype = "float32")
-            preds = maskNet.predict(faces)
+    if len(faces) > 0:
+        faces = np.array(faces, dtype = "float32")
+        preds = maskNet.predict(faces)
 
     return (locs, preds)
 
@@ -164,7 +164,7 @@ maskNet = load_model(args["mask"])
 # initialize the video stream on a webcam
 print("<Starting video stream......>")
 video = VideoStream(src=0).start()
-time.sleep(3.0)         # a gentle pause to allow the camera to warm up
+time.sleep(2.0)         # a gentle pause to allow the camera to warm up
 
 print("<NOTE: Press `ESC` to quit detections!>")
 
@@ -222,7 +222,9 @@ while True:
     
     # show the output frame
     cv2.imshow("Frame", frame)
-    key = cv2.waitKey(0)
+    key = cv2.waitKey(10)
+    
+    # if the ESC key is pressed, break from loop
     if key == 27:       # ESC
         print("<Ending video stream......>")
 
@@ -230,5 +232,6 @@ while True:
         cv2.destroyAllWindows()
         video.stop()
         break
-
+video.stop()
+cv2.destroyAllWindows()
 print("<End of Face-Mask Detection.>")
