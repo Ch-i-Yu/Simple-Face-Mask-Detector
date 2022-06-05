@@ -215,7 +215,7 @@ while True:
             text = label,
             org = (x_start, y_start-10),
             fontFace = cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale = 0.45,
+            fontScale = 0.8,
             color = color,
             thickness = 2
         )   #label
@@ -224,7 +224,7 @@ while True:
             pt1 = (x_start, y_start),
             pt2 = (x_end, y_end),
             color = color, 
-            thickness = 2
+            thickness = 3
         )   # bounding box
     
     # show the output frame
@@ -251,8 +251,8 @@ cv2.destroyAllWindows()
 # Save all output frames as MP4 video
 if args["video"]:
     print("<Saving video......>")
-    output_path = os.path.sep.join(["./Processed", time.asctime() + ".mp4"])
-    output = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'DIVX'), 30, size)
+    output_path = os.path.sep.join(["./Processed", time.asctime().replace(' ', '_').replace(':', '-') + ".mp4"])
+    output = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), 12, size)
 
     for i in range(len(img_array)):
         output.write(img_array[i])
