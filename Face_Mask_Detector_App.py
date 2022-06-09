@@ -71,7 +71,7 @@ def mask_detection():
         # extract confidence of face detection
         face_confidence = face_detections[0, 0, i, 2]
         
-        if face_confidence > 0.5:
+        if face_confidence > 0.50:
             # compute the (x, y) coordinates of the bounding box of detected face
             face_box = face_detections[0, 0, i, 3:7] * np.array([w, h, w, h])
             (x_start, y_start, x_end, y_end) = face_box.astype("int")
@@ -134,7 +134,7 @@ def mask_detection():
 
 
 
-# set custome page state of title, layout, sidebar
+# set custom page state of title, layout, sidebar
 st.set_page_config(
     page_title = "Simplified Face-Mask Detector",
     layout = "centered",

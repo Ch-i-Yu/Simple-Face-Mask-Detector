@@ -148,9 +148,9 @@ for i in range(0, face_detections.shape[2]):
 
         # determine the color of bounding box & bounding description
         if label == "with Mask":
-            color = (0, 250, 0)     # green
+            color = (0, 250, 0)     # green in BGR
         else:
-            color = (0, 0, 250)     # red
+            color = (0, 0, 250)     # red in BGR
 
         # add probability to the label
         label = "{}: {:.2f}%".format(label, max(with_mask, without_mask) * 100)
