@@ -6,14 +6,14 @@
 
 
 """
-Face-Mask Detector with OpenCV and Keras(TensorFlow)
+Face-Mask Detector with OpenCV and Keras
 
 This goal of this project is to roughly identify
 wheather a person is wearing a mask or not.
 
 This project aims to:
-- Train a model on images of people wearing masks on Google Colab & Google Drive
-- Deploy te trained model to faces-masks in images and video streams
+- Train a model on images of people wearing masks
+- Deploy the trained model to faces-masks in images and video streams
 
 This python program aims to:
 - Predict a image with pre-trained model
@@ -180,8 +180,8 @@ fileName = os.path.sep.join([args["destination"], "processed_" + args["image"].s
 retval = cv2.imwrite(fileName, image)
 
 if retval:
-    print("<processed_" + args["image"].split("\\")[-1] + " saved successfuly.>")
+    print("<processed_" + args["image"].split("\\")[-1] + " saved successfully.>")
 else:
-    print("<processed_" + args["image"].split("\\")[-1] + " saved unsuccessfuly.>")
+    print("<processed_" + args["image"].split("\\")[-1] + " saved unsuccessfully.>")
 
 print("<End of Face-Mask Detection.>")
