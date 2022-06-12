@@ -47,8 +47,7 @@ def main():
 
     # download external dependencies
     for fileName in EXTERNAL_DEPENDENCIES.keys():
-        if not download_file(fileName):
-            st.markdown("File Not Downloaded" + fileName)
+        download_file(fileName)
 
     DOWNLOAD_TEXT.empty()
 
@@ -78,18 +77,28 @@ def main():
 
 
 
-def download_file(path):
+def download_file(fileName):
     # initialize visual components to animate
     weights_warning = None
     progress_bar = None
 
     # set animation
     try:
-        weights_warning = st.warning("Downloading %s..." % path)
+        weights_warning = st.warning("Downloading %s..." % fileName)
         progress_bar = st.progress(0)
 
-        with open(path, "wb") as output:
-            with urllib.request.urlopen(EXTERNAL_DEPENDENCIES[path]["url"]) as response:
+        dst_folder = os.path.exists(EXTERNAL_DEPENDENCIES[fileName]["directory"])
+        if not dst_folder:
+            os.makedirs(EXTERNAL_DEPENDENCIES[fileName]["directory"])
+
+        dst_path = EXTERNAL_DEPENDENCIES[fileName]["directory"] + "/" + fileName
+
+        if os.path.exists(dst_path):
+            st.sidebar.success(fileName + " already exists!")
+            return
+
+        with open(dst_path, "wb") as output:
+            with urllib.request.urlopen(EXTERNAL_DEPENDENCIES[fileName]["url"]) as response:
                 length = int(response.info()["Content-Length"])
                 counter = 0.0
                 MEGABYTES = 2.0 ** 20.0         # 2 ^ 20
@@ -103,7 +112,7 @@ def download_file(path):
 
                     # operate animation by overwriting components
                     weights_warning.warning("Downloading %s...(%6.2f/%6.2f MB)" % 
-                        (path, counter / MEGABYTES, length / MEGABYTES))
+                        (fileName, counter / MEGABYTES, length / MEGABYTES))
                     progress_bar.progress(min(counter / length, 1.0))
 
     # clear all components after downloading
@@ -114,7 +123,7 @@ def download_file(path):
         if progress_bar is not None:
             progress_bar.empty()
 
-    return True
+    return
 
 
 
@@ -241,15 +250,18 @@ def load_file_content_as_string(path):
 # External files to download
 EXTERNAL_DEPENDENCIES = {
     "deploy.prototxt":{
-        "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/FaceNet/deploy.prototxt"
+        "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/FaceNet/deploy.prototxt",
+        "directory": "Model/FaceNet"
     },
 
     "res10_300x300_ssd_iter_140000.caffemodel":{
-        "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/FaceNet/res10_300x300_ssd_iter_140000.caffemodel"
+        "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/FaceNet/res10_300x300_ssd_iter_140000.caffemodel",
+        "directory": "Model/FaceNet"
     },
 
     "mask_net.model":{
-        "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/MaskNet/mask_net.model"
+        "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/MaskNet/mask_net.model",
+        "directory": "Model/MaskNet"
     }
 }
 
