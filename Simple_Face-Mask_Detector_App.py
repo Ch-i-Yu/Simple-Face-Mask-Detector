@@ -20,8 +20,6 @@ This python program aims to:
 
 
 # import required dependencies and libraries
-from ast import Global
-from importlib_metadata import FreezableDefaultDict
 import streamlit as st
 
 from keras.applications.mobilenet_v2 import preprocess_input
