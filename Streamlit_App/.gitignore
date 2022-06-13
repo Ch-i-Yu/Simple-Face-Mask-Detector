@@ -1,0 +1,5 @@
+# ignore all except .gitignore file
+*
+!.gitignore
+!Simple_Face-Mask_Detector_App.py
+!App_Instruction.md
