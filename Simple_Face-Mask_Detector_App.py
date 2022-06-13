@@ -26,9 +26,8 @@ from keras.applications.mobilenet_v2 import preprocess_input
 from keras.utils import img_to_array
 from keras.models import load_model
 
-from PIL import Image, ImageEnhance
+from PIL import Image
 
-import pandas as pd
 import numpy as np
 import cv2
 import os
