@@ -239,7 +239,7 @@ def process_detection():
                 dst_image,
                 use_column_width = True)
             
-            st.markdown('<h3 align="center">Image uploaded successfully!</h3>', unsafe_allow_html=True)
+            st.markdown('<h3 align="center">Image detected successfully!</h3>', unsafe_allow_html=True)
 
 
 

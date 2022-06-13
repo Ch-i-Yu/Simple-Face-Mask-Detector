@@ -31,7 +31,6 @@ import numpy as np
 import argparse
 import cv2
 import os
-from natsort import natsorted, ns
 
 
 # construct parsed arguments
