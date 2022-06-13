@@ -1,0 +1,2 @@
+# This requirements contains necessary dependencies for training and prediction.
+# Specifically, train_detector.py, predict_image.py, predict_video.py.
