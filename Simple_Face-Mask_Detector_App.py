@@ -46,6 +46,7 @@ def main():
     # set page title, layout, sidebar
     st.set_page_config(page_title = "Simple Face-Mask Detector")
 
+    # set download notation
     DOWNLOAD_TEXT = st.markdown("### Loading...Please wait")
 
     # download external dependencies
@@ -72,14 +73,14 @@ def main():
     
     elif selectMode == "Detect on Image":
         README_TEXT.empty()
-        execute()
+        process_detection()
     
     elif selectMode == "Detect on Webcam Video Stream":
         st.sidebar.warning("Streamlit doesn't currently have any browser-based camera support.")
         st.sidebar.info("Therefore further development of this feature has been postponed indefinitely.")
 
 
-
+# doanload necessary dependencies with visualization
 def download_file(fileName):
     # initialize visual components to animate
     weights_warning = None
@@ -130,7 +131,8 @@ def download_file(fileName):
 
 
 
-def execute():
+# process detection in image
+def process_detection():
     def face_mask_detect(origin_image):
         # load pre-trained face detector DNN net
         faceNet = cv2.dnn.readNet("Model/FaceNet/deploy.prototxt", "Model/FaceNet/res10_300x300_ssd_iter_140000.caffemodel")
@@ -216,6 +218,7 @@ def execute():
 
         return origin_image
 
+    # page notation
     st.markdown('<h2 align="center">Detection on Image</h2>', unsafe_allow_html=True)
     st.markdown("**Upload your image here:**")
 
@@ -224,6 +227,7 @@ def execute():
     if uploaded_image is not None:
         st.image(
             uploaded_image,
+            # unique caption of uploaded image
             caption = time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()),
             use_column_width = True)
 
@@ -231,7 +235,8 @@ def execute():
         
         st.markdown('<h3 align="center">Image uploaded successfully!</h3>', unsafe_allow_html=True)
 
-        if st.button("Process"):
+        # start detection if button is pressed
+        if st.button("Start Detection"):
             dst_image = face_mask_detect(origin_image)
             st.image(
                 dst_image,
@@ -241,7 +246,8 @@ def execute():
 
 
 
-@st.experimental_singleton(show_spinner=False)
+# load hashable file content which not destroy with the completion of an application
+@st.experimental_singleton(show_spinner=False)      # experimental feature of function decorator to store singleton objects.
 def load_file_content_as_string(path):
     repo_url = "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main" + "/" + path
     response = urllib.request.urlopen(repo_url)
@@ -249,7 +255,7 @@ def load_file_content_as_string(path):
 
 
 
-# External files to download
+# external files to download
 EXTERNAL_DEPENDENCIES = {
     "deploy.prototxt":{
         "url": "https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Model/FaceNet/deploy.prototxt",
