@@ -46,10 +46,15 @@ See also in the following accuracy/loss training curve plot:
 3. To detect face masks in video streams, execute the following sample command:
    `python predict_video.py`
 4. To find a Web-App version of the Simple Face-Mask Detector, execute the following sample command:
+   
    `streamlit run Simple_Face-Mask_Detector_App.py`
+   
    or
+   
    `streamlit run https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Simple_Face-Mask_Detector_App.py`
-   or simply visit [Streamlit App Link](https://share.streamlit.io/ch-i-yu/simple-face-mask-detector/main/Simple_Face-Mask_Detector_App.py)
+   
+   
+   or simply visit [Streamlit App Link](https://share.streamlit.io/ch-i-yu/simple-face-mask-detector/main/Simple_Face-Mask_Detector_App.py).
 
 ### Inspiration
 This simplified, hello-world like project for a greenhand in Computer vision is inspired by the efforts of **Adrian Rosebrock** and **Prajna Bhandary**.
