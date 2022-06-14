@@ -29,7 +29,9 @@ The dataset consists of 1,376 images belongs to two classes:<br>
 The images used were real images of human faces, however artificial face masks were added to create an artificial (but still real-world applicable) dataset.
 
 ### Prerequisties
-All the dependencies and required libraries are included in the file `requirements.txt`(TBC).
+All the dependencies and required libraries are included in the file `requirements.txt`.
+
+*Note: packages.txt is importing streamlit-needed exnternal dependencies. Ignore it if you are using Ananconda venv.*
 
 ### Results
 The model gave 98% accuracy for Face Mask Detection after training.<br>
@@ -43,6 +45,11 @@ See also in the following accuracy/loss training curve plot:
    `python predict_image.py -i .\Examples\Images\image-01.jpg`
 3. To detect face masks in video streams, execute the following sample command:
    `python predict_video.py`
+4. To find a Web-App version of the Simple Face-Mask Detector, execute the following sample command:
+   `streamlit run Simple_Face-Mask_Detector_App.py`
+   or
+   `streamlit run https://raw.githubusercontent.com/Ch-i-Yu/Simple-Face-Mask-Detector/main/Simple_Face-Mask_Detector_App.py`
+   or simply visit [Streamlit App Link](https://share.streamlit.io/ch-i-yu/simple-face-mask-detector/main/Simple_Face-Mask_Detector_App.py)
 
 ### Inspiration
 This simplified, hello-world like project for a greenhand in Computer vision is inspired by the efforts of **Adrian Rosebrock** and **Prajna Bhandary**.
