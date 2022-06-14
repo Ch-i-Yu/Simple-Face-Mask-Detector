@@ -40,10 +40,13 @@ See also in the following accuracy/loss training curve plot:
 
 ### Working
 1. To train the Face-Mask Detector, execute the following sample command:
+   
    `python train_detector.py -d Dataset`
 2. To detect face masks in an single image, execute the following sample command:
+   
    `python predict_image.py -i .\Examples\Images\image-01.jpg`
 3. To detect face masks in video streams, execute the following sample command:
+   
    `python predict_video.py`
 4. To find a Web-App version of the Simple Face-Mask Detector, execute the following sample command:
    
