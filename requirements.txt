@@ -1,6 +1,6 @@
 # This requirements contains necessary dependencies for Project Simple Face-Mask Detector.
 # Python 3.10.4
-tensorflow==2.9.1
+tensorflow
 imutils==0.5.4
 jupyter==1.0.0
 jupyter-console==6.4.3
