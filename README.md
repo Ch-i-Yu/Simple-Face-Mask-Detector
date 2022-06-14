@@ -28,7 +28,7 @@ The dataset consists of 1,376 images belongs to two classes:<br>
 
 The images used were real images of human faces, however artificial face masks were added to create an artificial (but still real-world applicable) dataset.
 
-### Prerequisties
+### Prerequisites
 All the dependencies and required libraries are included in the file `requirements.txt`.
 
 *Note: packages.txt is importing streamlit-needed exnternal dependencies. Ignore it if you are using Ananconda venv.*
@@ -65,6 +65,6 @@ This simplified, hello-world like project for a greenhand in Computer vision is 
 ### Special Thanks to...
 Thanks for my awesome guys, **Xiyu L.** and **Feng J.** who helped me to test my tiny project and record the lovely gif in the front of this page.
 
-### Lisence
+### License
 
 MIT © [Ch'i YU](https://github.com/Ch-i-Yu)
